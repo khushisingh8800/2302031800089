@@ -1,1 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Club</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Book Club</h1>
+        <nav>
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Books</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section class="book">
+            <img src="book-cover.jpg" alt="Book Cover">
+            <div class="book-details">
+                <h2>Book Title</h2>
+                <p>Author: John Doe</p>
+                <p>Description of the book goes here. It's a great read!</p>
+            </div>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2025 Book Club</p>
+    </footer>
+</body>
+</html>
+
+# css
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+header {
+    background-color: #333;
+    color: white;
+    padding: 10px 0;
+}
+
+header h1 {
+    text-align: center;
+    margin: 0;
+}
+
+nav ul {
+    display: flex;
+    justify-content: center;
+    list-style-type: none;
+    padding: 0;
+}
+
+nav ul li {
+    margin: 0 15px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+}
+
+main {
+    padding: 20px;
+}
+
+.book {
+    display: flex;
+    background-color: white;
+    padding: 20px;
+    margin: 20px 0;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.book img {
+    max-width: 150px;
+    margin-right: 20px;
+}
+
+.book-details h2 {
+    margin: 0 0 10px;
+}
+
+footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+}
+
+
 
