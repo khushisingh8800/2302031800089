@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comment Section with Background Image</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-image: url('https://assets.onecompiler.app/439vgyqtx/43c6hhk8b/HD-wallpaper-brown-stripes-background-brown-aesthetic.jpg'); /* Replace with your image path */
+            background-size: cover;
+            background-position: center;
+        }
+        .container {
+            background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent white background */
+            border-radius: 8px;
+            padding: 20px;
+            width: 400px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .comment-container {
+            margin-bottom: 20px;
+        }
+        .comment-header {
+            font-size: 14px;
+            color: #606770;
+            margin-bottom: 8px;
+        }
+        .comment-author {
+            font-weight: bold;
+            color: #385898;
+        }
+        .comment-content {
+            font-size: 16px;
+            color: #1c1e21;
+            margin-bottom: 8px;
+        }
+        .comment-actions {
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+            color: #606770;
+        }
+        .comment-actions span {
+            margin-right: 16px;
+            cursor: pointer;
+        }
+        .comment-actions span:hover {
+            text-decoration: underline;
+        }
+        .write-comment {
+            margin-top: 20px;
+        }
+        .write-comment textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+            resize: none;
+        }
+        .write-comment button {
+            margin-top: 10px;
+            padding: 8px 16px;
+            background-color: #385898;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .write-comment button:hover {
+            background-color: #2d4878;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="comment-container">
+            <div class="comment-header">
+                <span class="comment-author">Meda Jackson</span>
+            </div>
+            <div class="comment-content">
+                It was wonderful to meet with our council woman and other city officials and discuss the issues in our community. Excited for the planned changes and improvements to come.
+            </div>
+            <div class="comment-actions">
+                <span>Like</span>
+                <span>Reply</span>
+                <span>Hide</span>
+                <span>Send Message</span>
+                <span>3h</span>
+            </div>
+        </div>
+
+        <!-- Writing Section -->
+        <div class="write-comment">
+            <textarea placeholder="Write a comment..." rows="3"></textarea>
+            <button onclick="location.href='file:///C:/home%20decoration/home%20decoration/book%20reading%20club/share.html'">Post</button>
+        </div>
+    </div>
+</body>
+</html>
