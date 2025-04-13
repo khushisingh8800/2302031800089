@@ -1,3 +1,4 @@
+#using random library of python = Game of snakes and ladders
 import random
 
 # the positions of snakes and ladders on  board
