@@ -1,0 +1,2223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusCanteen Manager | Advanced College Canteen System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #8B0000;
+            --secondary: #FFD700;
+            --accent: #228B22;
+            --light: #F5F5F5;
+            --dark: #333333;
+            --danger: #dc3545;
+            --warning: #ffc107;
+            --success: #28a745;
+            --info: #17a2b8;
+            --gray: #6c757d;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header Styles */
+        header {
+            background-color: white;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            animation: slideDown 0.5s ease-out;
+        }
+        
+        @keyframes slideDown {
+            from { transform: translateY(-100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo i {
+            font-size: 2rem;
+            color: var(--primary);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .logo span {
+            color: var(--secondary);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+        
+        nav a {
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            font-size: 1rem;
+            position: relative;
+        }
+        
+        nav a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: var(--primary);
+            transition: width 0.3s ease;
+        }
+        
+        nav a:hover::after, nav a.active::after {
+            width: 100%;
+        }
+        
+        nav a:hover, nav a.active {
+            color: var(--primary);
+        }
+        
+        .header-buttons {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+        
+        .btn:hover::before {
+            left: 100%;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+        }
+        
+        .btn-secondary {
+            background-color: var(--secondary);
+            color: var(--dark);
+        }
+        
+        .btn-danger {
+            background-color: var(--danger);
+            color: white;
+        }
+        
+        .btn-warning {
+            background-color: var(--warning);
+            color: var(--dark);
+        }
+        
+        .btn-success {
+            background-color: var(--success);
+            color: white;
+        }
+        
+        .btn-info {
+            background-color: var(--info);
+            color: white;
+        }
+        
+        .btn-sm {
+            padding: 5px 10px;
+            font-size: 0.8rem;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-primary:hover {
+            background-color: #690000;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            transition: transform 0.3s;
+        }
+        
+        .user-avatar:hover {
+            transform: rotate(15deg);
+        }
+        
+        /* Dashboard Styles */
+        .dashboard {
+            padding: 2rem 0;
+        }
+        
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            animation: fadeIn 0.8s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .dashboard-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border-left: 4px solid var(--primary);
+            transition: transform 0.3s, box-shadow 0.3s;
+            animation: cardAppear 0.5s ease-out;
+            animation-fill-mode: both;
+        }
+        
+        .dashboard-card:nth-child(1) { animation-delay: 0.1s; }
+        .dashboard-card:nth-child(2) { animation-delay: 0.2s; }
+        .dashboard-card:nth-child(3) { animation-delay: 0.3s; }
+        .dashboard-card:nth-child(4) { animation-delay: 0.4s; }
+        
+        @keyframes cardAppear {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .dashboard-card.warning {
+            border-left-color: var(--warning);
+        }
+        
+        .dashboard-card.danger {
+            border-left-color: var(--danger);
+        }
+        
+        .dashboard-card.success {
+            border-left-color: var(--success);
+        }
+        
+        .dashboard-card.info {
+            border-left-color: var(--info);
+        }
+        
+        .dashboard-card h3 {
+            color: var(--dark);
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+        
+        .dashboard-card .value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary);
+            transition: transform 0.3s;
+        }
+        
+        .dashboard-card:hover .value {
+            transform: scale(1.1);
+        }
+        
+        .dashboard-card.warning .value {
+            color: var(--warning);
+        }
+        
+        .dashboard-card.danger .value {
+            color: var(--danger);
+        }
+        
+        .dashboard-card.success .value {
+            color: var(--success);
+        }
+        
+        .dashboard-card.info .value {
+            color: var(--info);
+        }
+        
+        .dashboard-card .description {
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+        
+        /* Excel-like Table Styles */
+        .excel-section {
+            margin-bottom: 2rem;
+            animation: fadeIn 0.8s ease-out;
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .section-title i {
+            color: var(--primary);
+        }
+        
+        .table-container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            margin-bottom: 2rem;
+            overflow-x: auto;
+            animation: slideUp 0.5s ease-out;
+        }
+        
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .table-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .search-box {
+            display: flex;
+            align-items: center;
+            background-color: var(--light);
+            border-radius: 4px;
+            padding: 5px 10px;
+            transition: box-shadow 0.3s;
+        }
+        
+        .search-box:focus-within {
+            box-shadow: 0 0 0 2px rgba(139, 0, 0, 0.2);
+        }
+        
+        .search-box input {
+            border: none;
+            background: transparent;
+            padding: 5px;
+            outline: none;
+            width: 200px;
+            transition: width 0.3s;
+        }
+        
+        .search-box input:focus {
+            width: 250px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+            transition: background-color 0.2s;
+        }
+        
+        th {
+            background-color: var(--light);
+            font-weight: 600;
+            color: var(--dark);
+            position: sticky;
+            top: 0;
+        }
+        
+        tr {
+            transition: transform 0.2s, background-color 0.2s;
+        }
+        
+        tr:hover {
+            background-color: #f9f9f9;
+            transform: scale(1.01);
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            transition: transform 0.2s;
+        }
+        
+        .status-badge:hover {
+            transform: scale(1.05);
+        }
+        
+        .status-expired {
+            background-color: #ffe6e6;
+            color: var(--danger);
+        }
+        
+        .status-warning {
+            background-color: #fff8e6;
+            color: #b38f00;
+        }
+        
+        .status-good {
+            background-color: #e6f7ee;
+            color: var(--success);
+        }
+        
+        .status-veg {
+            background-color: #e6f7ee;
+            color: var(--success);
+        }
+        
+        .status-nonveg {
+            background-color: #ffe6e6;
+            color: var(--danger);
+        }
+        
+        /* Temperature Monitoring Section */
+        .temperature-section {
+            margin-bottom: 2rem;
+        }
+        
+        .temperature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .temperature-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s, box-shadow 0.3s;
+            animation: cardAppear 0.5s ease-out;
+        }
+        
+        .temperature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .temperature-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .temperature-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            transition: transform 0.3s;
+        }
+        
+        .temperature-card:hover .temperature-icon {
+            transform: rotate(15deg) scale(1.1);
+        }
+        
+        .temperature-icon.good {
+            background-color: var(--success);
+        }
+        
+        .temperature-icon.warning {
+            background-color: var(--warning);
+        }
+        
+        .temperature-icon.danger {
+            background-color: var(--danger);
+        }
+        
+        .temperature-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            transition: transform 0.3s;
+        }
+        
+        .temperature-card:hover .temperature-value {
+            transform: scale(1.05);
+        }
+        
+        .temperature-range {
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+        
+        .temperature-progress {
+            height: 10px;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            margin: 1rem 0;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .temperature-progress-bar {
+            height: 100%;
+            border-radius: 5px;
+            position: absolute;
+            left: 0;
+            top: 0;
+            transition: width 1s ease-in-out;
+        }
+        
+        .temperature-progress-bar.good {
+            background-color: var(--success);
+        }
+        
+        .temperature-progress-bar.warning {
+            background-color: var(--warning);
+        }
+        
+        .temperature-progress-bar.danger {
+            background-color: var(--danger);
+        }
+        
+        .temperature-markers {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 5px;
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+        
+        .temp-alert {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 4px;
+            padding: 10px;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            animation: pulse 2s infinite;
+        }
+        
+        .temp-alert.danger {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+        }
+        
+        /* Compliance Section */
+        .compliance-section {
+            margin-bottom: 2rem;
+        }
+        
+        .compliance-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .compliance-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .compliance-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .compliance-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .compliance-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            transition: transform 0.3s;
+        }
+        
+        .compliance-card:hover .compliance-icon {
+            transform: rotate(15deg) scale(1.1);
+        }
+        
+        .compliance-icon.good {
+            background-color: var(--success);
+        }
+        
+        .compliance-icon.warning {
+            background-color: var(--warning);
+        }
+        
+        .compliance-icon.danger {
+            background-color: var(--danger);
+        }
+        
+        .compliance-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            transition: transform 0.3s;
+        }
+        
+        .compliance-card:hover .compliance-value {
+            transform: scale(1.05);
+        }
+        
+        .compliance-progress {
+            height: 8px;
+            background-color: #e0e0e0;
+            border-radius: 4px;
+            margin: 1rem 0;
+            overflow: hidden;
+        }
+        
+        .compliance-progress-bar {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 1s ease-in-out;
+        }
+        
+        .compliance-progress-bar.good {
+            background-color: var(--success);
+        }
+        
+        .compliance-progress-bar.warning {
+            background-color: var(--warning);
+        }
+        
+        .compliance-progress-bar.danger {
+            background-color: var(--danger);
+        }
+        
+        /* Tabs */
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid #e0e0e0;
+            margin-bottom: 1.5rem;
+        }
+        
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+            position: relative;
+        }
+        
+        .tab::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 3px;
+            bottom: -3px;
+            left: 50%;
+            background-color: var(--primary);
+            transition: all 0.3s;
+        }
+        
+        .tab.active::after {
+            width: 100%;
+            left: 0;
+        }
+        
+        .tab.active {
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 3rem 0 1.5rem;
+            margin-top: 3rem;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .footer-column h3 {
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+            color: var(--secondary);
+        }
+        
+        .footer-column ul {
+            list-style: none;
+        }
+        
+        .footer-column ul li {
+            margin-bottom: 0.8rem;
+        }
+        
+        .footer-column a {
+            color: #ddd;
+            text-decoration: none;
+            transition: color 0.3s;
+            position: relative;
+        }
+        
+        .footer-column a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 1px;
+            bottom: -2px;
+            left: 0;
+            background-color: var(--secondary);
+            transition: width 0.3s;
+        }
+        
+        .footer-column a:hover::after {
+            width: 100%;
+        }
+        
+        .footer-column a:hover {
+            color: var(--secondary);
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 1rem;
+        }
+        
+        .social-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            transition: all 0.3s;
+        }
+        
+        .social-links a:hover {
+            background-color: var(--secondary);
+            transform: translateY(-3px);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+        
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease-out;
+        }
+        
+        .modal-content {
+            background-color: white;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            animation: modalAppear 0.3s ease-out;
+        }
+        
+        @keyframes modalAppear {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .modal-header h2 {
+            color: var(--primary);
+        }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--gray);
+            transition: transform 0.3s;
+        }
+        
+        .close-btn:hover {
+            transform: rotate(90deg);
+        }
+        
+        .modal-body {
+            padding: 1.5rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(139, 0, 0, 0.2);
+            outline: none;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .form-row .form-group {
+            flex: 1;
+        }
+        
+        /* Toast Notifications */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            background-color: var(--success);
+            color: white;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 3000;
+            transform: translateX(150%);
+            transition: transform 0.3s ease-out;
+            max-width: 400px;
+            word-wrap: break-word;
+        }
+        
+        .toast.show {
+            transform: translateX(0);
+        }
+        
+        .toast.error {
+            background-color: var(--danger);
+        }
+        
+        .toast.warning {
+            background-color: var(--warning);
+            color: var(--dark);
+        }
+        
+        .toast.info {
+            background-color: var(--info);
+        }
+        
+        /* Loading Spinner */
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Responsive Styles */
+        @media (max-width: 992px) {
+            .header-content {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .dashboard-header {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+            
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .compliance-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .table-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .logo h1 {
+                font-size: 1.5rem;
+            }
+            
+            nav ul {
+                gap: 15px;
+            }
+            
+            .user-info span {
+                display: none;
+            }
+            
+            .tabs {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-utensils"></i>
+                    <h1>Campus<span>Canteen</span></h1>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="#" class="active">Dashboard</a></li>
+                        <li><a href="#">Inventory</a></li>
+                        <li><a href="#">Vendors</a></li>
+                        <li><a href="#">Compliance</a></li>
+                        <li><a href="#">Reports</a></li>
+                        <li><a href="#">Settings</a></li>
+                    </ul>
+                </nav>
+                <div class="user-info">
+                    <span>Admin User</span>
+                    <div class="user-avatar">AU</div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Dashboard -->
+    <section class="dashboard">
+        <div class="container">
+            <div class="dashboard-header">
+                <h2>College Canteen Monitoring Dashboard</h2>
+                <div>
+                    <button class="btn btn-primary" id="addItemBtn">Add New Item</button>
+                    <button class="btn btn-secondary" id="exportExcelBtn">Export to Excel</button>
+                </div>
+            </div>
+            
+            <div class="dashboard-grid">
+                <div class="dashboard-card">
+                    <h3>Total Canteens</h3>
+                    <div class="value">8</div>
+                    <div class="description">Across campus</div>
+                </div>
+                <div class="dashboard-card warning">
+                    <h3>Items Expiring Soon</h3>
+                    <div class="value">24</div>
+                    <div class="description">Within next 7 days</div>
+                </div>
+                <div class="dashboard-card danger">
+                    <h3>Non-Veg Items</h3>
+                    <div class="value">12</div>
+                    <div class="description">To be removed</div>
+                </div>
+                <div class="dashboard-card success">
+                    <h3>Compliance Score</h3>
+                    <div class="value">88%</div>
+                    <div class="description">Based on latest audit</div>
+                </div>
+            </div>
+            
+            <div class="tabs">
+                <div class="tab active" data-tab="inventory">Inventory Management</div>
+                <div class="tab" data-tab="compliance">Compliance Monitoring</div>
+                <div class="tab" data-tab="vendors">Vendor Management</div>
+            </div>
+            
+            <div class="tab-content active" id="inventory-tab">
+                <div class="excel-section">
+                    <div class="section-header">
+                        <div class="section-title">
+                            <i class="fas fa-clipboard-list"></i>
+                            <h2>Inventory Tracking Sheet</h2>
+                        </div>
+                        <div class="table-actions">
+                            <div class="search-box">
+                                <i class="fas fa-search"></i>
+                                <input type="text" placeholder="Search inventory..." id="searchInput">
+                            </div>
+                            <button class="btn btn-outline btn-sm" id="filterBtn">Filter</button>
+                            <button class="btn btn-primary btn-sm" id="addInventoryBtn">Add Item</button>
+                        </div>
+                    </div>
+                    
+                    <div class="table-container">
+                        <div class="table-header">
+                            <h3>All Inventory Items</h3>
+                            <div>
+                                <button class="btn btn-outline btn-sm" id="markNonVegBtn">Mark Non-Veg for Removal</button>
+                                <button class="btn btn-danger btn-sm" id="removeNonVegBtn">Remove All Non-Veg</button>
+                            </div>
+                        </div>
+                        <table id="inventoryTable">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <input type="checkbox" id="selectAll">
+                                    </th>
+                                    <th>Item ID</th>
+                                    <th>Item Name</th>
+                                    <th>Category</th>
+                                    <th>Type</th>
+                                    <th>Quantity</th>
+                                    <th>Expiry Date</th>
+                                    <th>Status</th>
+                                    <th>Canteen</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="inventoryTableBody">
+                                <!-- Table rows will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <div class="excel-section">
+                    <div class="section-header">
+                        <div class="section-title">
+                            <i class="fas fa-store"></i>
+                            <h2>Canteen Stock Management</h2>
+                        </div>
+                        <div class="table-actions">
+                            <button class="btn btn-info btn-sm" id="restockAllBtn">Restock All</button>
+                            <button class="btn btn-success btn-sm" id="generateOrderBtn">Generate Order</button>
+                        </div>
+                    </div>
+                    
+                    <div class="table-container">
+                        <table id="canteenTable">
+                            <thead>
+                                <tr>
+                                    <th>Canteen Name</th>
+                                    <th>Location</th>
+                                    <th>Veg Items</th>
+                                    <th>Non-Veg Items</th>
+                                    <th>Expiring Soon</th>
+                                    <th>Stock Status</th>
+                                    <th>Last Audit</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="canteenTableBody">
+                                <!-- Table rows will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tab-content" id="compliance-tab">
+                <div class="compliance-section">
+                    <h2>Compliance Monitoring</h2>
+                    <div class="compliance-grid">
+                        <div class="compliance-card">
+                            <div class="compliance-header">
+                                <h3>Food Safety Standards</h3>
+                                <div class="compliance-icon good">
+                                    <i class="fas fa-utensils"></i>
+                                </div>
+                            </div>
+                            <div class="compliance-value">92%</div>
+                            <p>All canteens following food safety protocols</p>
+                            <div class="compliance-progress">
+                                <div class="compliance-progress-bar good" style="width: 92%"></div>
+                            </div>
+                            <small>Last inspection: 2 days ago</small>
+                        </div>
+                        
+                        <div class="compliance-card">
+                            <div class="compliance-header">
+                                <h3>Hygiene & Cleanliness</h3>
+                                <div class="compliance-icon warning">
+                                    <i class="fas fa-hand-sparkles"></i>
+                                </div>
+                            </div>
+                            <div class="compliance-value">78%</div>
+                            <p>Some canteens need improvement in cleanliness</p>
+                            <div class="compliance-progress">
+                                <div class="compliance-progress-bar warning" style="width: 78%"></div>
+                            </div>
+                            <small>Last inspection: 1 week ago</small>
+                        </div>
+                        
+                        <div class="compliance-card">
+                            <div class="compliance-header">
+                                <h3>Non-Veg Elimination</h3>
+                                <div class="compliance-icon danger">
+                                    <i class="fas fa-times-circle"></i>
+                                </div>
+                            </div>
+                            <div class="compliance-value">45%</div>
+                            <p>Progress in removing non-veg items</p>
+                            <div class="compliance-progress">
+                                <div class="compliance-progress-bar danger" style="width: 45%"></div>
+                            </div>
+                            <small>Target: 100% by Dec 2023</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="excel-section">
+                    <div class="section-header">
+                        <div class="section-title">
+                            <i class="fas fa-clipboard-list"></i>
+                            <h2>Oil Quality & Replacement Schedule</h2>
+                        </div>
+                        <div class="table-actions">
+                            <button class="btn btn-warning btn-sm">Schedule Oil Change</button>
+                            <button class="btn btn-info btn-sm">Add Oil Batch</button>
+                        </div>
+                    </div>
+                    
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Oil Batch ID</th>
+                                    <th>Canteen</th>
+                                    <th>Fryer</th>
+                                    <th>Oil Type</th>
+                                    <th>Date Added</th>
+                                    <th>Usage Hours</th>
+                                    <th>Quality Score</th>
+                                    <th>Next Change</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>OIL-2023-11-01</td>
+                                    <td>Main Canteen</td>
+                                    <td>Fryer 1</td>
+                                    <td>Sunflower Oil</td>
+                                    <td>2023-11-01</td>
+                                    <td>42 hours</td>
+                                    <td>85%</td>
+                                    <td>2023-11-18</td>
+                                    <td><span class="status-badge status-good">Good</span></td>
+                                </tr>
+                                <tr>
+                                    <td>OIL-2023-11-05</td>
+                                    <td>Science Block</td>
+                                    <td>Fryer 1</td>
+                                    <td>Canola Oil</td>
+                                    <td>2023-11-05</td>
+                                    <td>28 hours</td>
+                                    <td>92%</td>
+                                    <td>2023-11-22</td>
+                                    <td><span class="status-badge status-good">Excellent</span></td>
+                                </tr>
+                                <tr>
+                                    <td>OIL-2023-10-28</td>
+                                    <td>Engineering Block</td>
+                                    <td>Fryer 1</td>
+                                    <td>Vegetable Oil</td>
+                                    <td>2023-10-28</td>
+                                    <td>68 hours</td>
+                                    <td>65%</td>
+                                    <td>2023-11-16</td>
+                                    <td><span class="status-badge status-warning">Needs Change</span></td>
+                                </tr>
+                                <tr>
+                                    <td>OIL-2023-11-08</td>
+                                    <td>Commerce Block</td>
+                                    <td>Fryer 1</td>
+                                    <td>Rice Bran Oil</td>
+                                    <td>2023-11-08</td>
+                                    <td>18 hours</td>
+                                    <td>95%</td>
+                                    <td>2023-11-25</td>
+                                    <td><span class="status-badge status-good">Excellent</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="excel-section">
+                    <div class="section-header">
+                        <div class="section-title">
+                            <i class="fas fa-clipboard-check"></i>
+                            <h2>Compliance Audit Log</h2>
+                        </div>
+                        <div class="table-actions">
+                            <button class="btn btn-primary btn-sm" id="scheduleAuditBtn">Schedule Audit</button>
+                            <button class="btn btn-outline btn-sm" id="exportReportBtn">Export Report</button>
+                        </div>
+                    </div>
+                    
+                    <div class="table-container">
+                        <table id="auditTable">
+                            <thead>
+                                <tr>
+                                    <th>Audit Date</th>
+                                    <th>Canteen</th>
+                                    <th>Food Safety</th>
+                                    <th>Hygiene</th>
+                                    <th>Veg-Only Compliance</th>
+                                    <th>Overall Score</th>
+                                    <th>Auditor</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="auditTableBody">
+                                <!-- Table rows will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tab-content" id="vendors-tab">
+                <div class="excel-section">
+                    <div class="section-header">
+                        <div class="section-title">
+                            <i class="fas fa-truck"></i>
+                            <h2>Approved Veg-Only Vendors</h2>
+                        </div>
+                        <div class="table-actions">
+                            <button class="btn btn-primary btn-sm" id="addVendorBtn">Add Vendor</button>
+                            <button class="btn btn-success btn-sm" id="placeBulkOrderBtn">Place Bulk Order</button>
+                        </div>
+                    </div>
+                    
+                    <div class="table-container">
+                        <table id="vendorTable">
+                            <thead>
+                                <tr>
+                                    <th>Vendor ID</th>
+                                    <th>Vendor Name</th>
+                                    <th>Specialization</th>
+                                    <th>Contact</th>
+                                    <th>Rating</th>
+                                    <th>Delivery Time</th>
+                                    <th>Discount</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="vendorTableBody">
+                                <!-- Table rows will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>CampusCanteen Manager</h3>
+                    <p>Comprehensive college canteen management system for inventory control, compliance monitoring, and vendor management.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="#">Dashboard</a></li>
+                        <li><a href="#">Inventory Management</a></li>
+                        <li><a href="#">Vendor Portal</a></li>
+                        <li><a href="#">Compliance Reports</a></li>
+                        <li><a href="#">Audit Schedule</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Policies</h3>
+                    <ul>
+                        <li><a href="#">Veg-Only Policy</a></li>
+                        <li><a href="#">Food Safety Standards</a></li>
+                        <li><a href="#">Hygiene Protocol</a></li>
+                        <li><a href="#">Waste Management</a></li>
+                        <li><a href="#">Vendor Agreement</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Contact Admin</h3>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt"></i> College Administration Block</li>
+                        <li><i class="fas fa-phone"></i> +91 98765 43210</li>
+                        <li><i class="fas fa-envelope"></i> canteen.admin@college.edu</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 CampusCanteen Manager. All rights reserved. | Compliant with College Veg-Only Policy 2023</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Add Item Modal -->
+    <div class="modal" id="addItemModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Add New Inventory Item</h2>
+                <button class="close-btn" id="closeItemModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="itemForm">
+                    <input type="hidden" id="editItemId">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="itemName">Item Name</label>
+                            <input type="text" class="form-control" id="itemName" placeholder="Enter item name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="itemCategory">Category</label>
+                            <select class="form-control" id="itemCategory" required>
+                                <option value="">Select category</option>
+                                <option value="food">Food</option>
+                                <option value="beverage">Beverage</option>
+                                <option value="snack">Snack</option>
+                                <option value="ingredient">Ingredient</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="itemType">Food Type</label>
+                            <select class="form-control" id="itemType" required>
+                                <option value="">Select type</option>
+                                <option value="veg">Vegetarian</option>
+                                <option value="nonveg">Non-Vegetarian</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="quantity">Quantity</label>
+                            <input type="number" class="form-control" id="quantity" placeholder="Enter quantity" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="expiryDate">Expiry Date</label>
+                            <input type="date" class="form-control" id="expiryDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="canteenLocation">Canteen Location</label>
+                            <select class="form-control" id="canteenLocation" required>
+                                <option value="">Select canteen</option>
+                                <option value="main">Main Canteen</option>
+                                <option value="engineering">Engineering Block</option>
+                                <option value="science">Science Block</option>
+                                <option value="commerce">Commerce Block</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="supplier">Supplier</label>
+                        <select class="form-control" id="supplier" required>
+                            <option value="">Select supplier</option>
+                            <option value="green-farms">Green Farms Organics</option>
+                            <option value="daily-dairy">Daily Dairy Co.</option>
+                            <option value="grains-more">Grains & More</option>
+                            <option value="spice-kingdom">Spice Kingdom</option>
+                        </select>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary" id="submitItemBtn">
+                        <span id="submitBtnText">Add Item to Inventory</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Advanced JavaScript for CampusCanteen Management System
+
+        // Data Models
+        class InventoryItem {
+            constructor(id, name, category, type, quantity, expiryDate, canteen, supplier) {
+                this.id = id;
+                this.name = name;
+                this.category = category;
+                this.type = type;
+                this.quantity = quantity;
+                this.expiryDate = expiryDate;
+                this.canteen = canteen;
+                this.supplier = supplier;
+                this.status = this.calculateStatus();
+            }
+            
+            calculateStatus() {
+                const today = new Date();
+                const expiry = new Date(this.expiryDate);
+                const diffTime = expiry - today;
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                
+                if (diffDays < 0) return 'expired';
+                if (diffDays <= 7) return 'warning';
+                return 'good';
+            }
+            
+            toTableRow() {
+                const statusBadge = this.status === 'good' ? 'status-good' : 
+                                  this.status === 'warning' ? 'status-warning' : 'status-expired';
+                const statusText = this.status === 'good' ? 'Good' : 
+                                 this.status === 'warning' ? 'Expiring Soon' : 'Expired';
+                const typeBadge = this.type === 'veg' ? 'status-veg' : 'status-nonveg';
+                const typeText = this.type === 'veg' ? 'Veg' : 'Non-Veg';
+                
+                return `
+                    <tr data-id="${this.id}">
+                        <td><input type="checkbox" class="row-checkbox" data-id="${this.id}"></td>
+                        <td>${this.id}</td>
+                        <td>${this.name}</td>
+                        <td>${this.category}</td>
+                        <td><span class="status-badge ${typeBadge}">${typeText}</span></td>
+                        <td>${this.quantity}</td>
+                        <td>${this.expiryDate}</td>
+                        <td><span class="status-badge ${statusBadge}">${statusText}</span></td>
+                        <td>${this.canteen}</td>
+                        <td>
+                            <button class="btn btn-outline btn-sm edit-btn" data-id="${this.id}">Edit</button>
+                            <button class="btn btn-danger btn-sm remove-btn" data-id="${this.id}">Remove</button>
+                        </td>
+                    </tr>
+                `;
+            }
+        }
+
+        class Canteen {
+            constructor(name, location, vegItems, nonVegItems, expiringSoon, lastAudit) {
+                this.name = name;
+                this.location = location;
+                this.vegItems = vegItems;
+                this.nonVegItems = nonVegItems;
+                this.expiringSoon = expiringSoon;
+                this.lastAudit = lastAudit;
+                this.stockStatus = this.calculateStockStatus();
+            }
+            
+            calculateStockStatus() {
+                const totalItems = this.vegItems + this.nonVegItems;
+                if (totalItems < 15) return 'warning';
+                return 'good';
+            }
+            
+            toTableRow() {
+                const statusBadge = this.stockStatus === 'good' ? 'status-good' : 'status-warning';
+                const statusText = this.stockStatus === 'good' ? 'Well Stocked' : 'Low Stock';
+                
+                return `
+                    <tr data-name="${this.name}">
+                        <td>${this.name}</td>
+                        <td>${this.location}</td>
+                        <td>${this.vegItems}</td>
+                        <td>${this.nonVegItems}</td>
+                        <td>${this.expiringSoon}</td>
+                        <td><span class="status-badge ${statusBadge}">${statusText}</span></td>
+                        <td>${this.lastAudit}</td>
+                        <td>
+                            <button class="btn btn-outline btn-sm view-details-btn" data-name="${this.name}">View Details</button>
+                        </td>
+                    </tr>
+                `;
+            }
+        }
+
+        class Vendor {
+            constructor(id, name, specialization, contact, rating, deliveryTime, discount) {
+                this.id = id;
+                this.name = name;
+                this.specialization = specialization;
+                this.contact = contact;
+                this.rating = rating;
+                this.deliveryTime = deliveryTime;
+                this.discount = discount;
+                this.status = 'active';
+            }
+            
+            toTableRow() {
+                return `
+                    <tr data-id="${this.id}">
+                        <td>${this.id}</td>
+                        <td>${this.name}</td>
+                        <td>${this.specialization}</td>
+                        <td>${this.contact}</td>
+                        <td>${this.rating}/5</td>
+                        <td>${this.deliveryTime}</td>
+                        <td>${this.discount}%</td>
+                        <td><span class="status-badge status-good">Active</span></td>
+                        <td>
+                            <button class="btn btn-outline btn-sm order-btn" data-id="${this.id}">Order</button>
+                        </td>
+                    </tr>
+                `;
+            }
+        }
+
+        // Application State
+        const state = {
+            inventory: [],
+            canteens: [],
+            vendors: [],
+            nextItemId: 6,
+            nextVendorId: 5,
+            editingItem: null
+        };
+
+        // Utility Functions
+        const utils = {
+            showToast(message, type = 'success') {
+                const toast = document.getElementById('toast');
+                toast.textContent = message;
+                toast.className = `toast ${type}`;
+                toast.classList.add('show');
+                
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 3000);
+            },
+            
+            generateId(prefix) {
+                return `${prefix}-${Date.now()}`;
+            },
+            
+            formatDate(date) {
+                return new Date(date).toISOString().split('T')[0];
+            },
+            
+            debounce(func, wait) {
+                let timeout;
+                return function executedFunction(...args) {
+                    const later = () => {
+                        clearTimeout(timeout);
+                        func(...args);
+                    };
+                    clearTimeout(timeout);
+                    timeout = setTimeout(later, wait);
+                };
+            },
+            
+            showConfirmation(message, confirmCallback, cancelCallback = null) {
+                // Create confirmation modal
+                const modal = document.createElement('div');
+                modal.className = 'modal';
+                modal.style.display = 'flex';
+                
+                modal.innerHTML = `
+                    <div class="modal-content" style="max-width: 500px;">
+                        <div class="modal-header">
+                            <h2>Confirm Action</h2>
+                            <button class="close-btn" id="closeConfirmModal">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <p>${message}</p>
+                            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                                <button class="btn btn-primary" id="confirmBtn">Confirm</button>
+                                <button class="btn btn-outline" id="cancelBtn">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                document.body.appendChild(modal);
+                
+                // Add event listeners
+                document.getElementById('closeConfirmModal').addEventListener('click', () => {
+                    document.body.removeChild(modal);
+                    if (cancelCallback) cancelCallback();
+                });
+                
+                document.getElementById('cancelBtn').addEventListener('click', () => {
+                    document.body.removeChild(modal);
+                    if (cancelCallback) cancelCallback();
+                });
+                
+                document.getElementById('confirmBtn').addEventListener('click', () => {
+                    document.body.removeChild(modal);
+                    confirmCallback();
+                });
+                
+                // Close modal when clicking outside
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) {
+                        document.body.removeChild(modal);
+                        if (cancelCallback) cancelCallback();
+                    }
+                });
+            }
+        };
+
+        // DOM Elements
+        const elements = {
+            // Modals
+            addItemModal: document.getElementById('addItemModal'),
+            closeItemModal: document.getElementById('closeItemModal'),
+            itemForm: document.getElementById('itemForm'),
+            modalTitle: document.getElementById('modalTitle'),
+            submitBtnText: document.getElementById('submitBtnText'),
+            editItemId: document.getElementById('editItemId'),
+            
+            // Buttons
+            addItemBtn: document.getElementById('addItemBtn'),
+            addInventoryBtn: document.getElementById('addInventoryBtn'),
+            exportExcelBtn: document.getElementById('exportExcelBtn'),
+            markNonVegBtn: document.getElementById('markNonVegBtn'),
+            removeNonVegBtn: document.getElementById('removeNonVegBtn'),
+            restockAllBtn: document.getElementById('restockAllBtn'),
+            generateOrderBtn: document.getElementById('generateOrderBtn'),
+            scheduleAuditBtn: document.getElementById('scheduleAuditBtn'),
+            exportReportBtn: document.getElementById('exportReportBtn'),
+            addVendorBtn: document.getElementById('addVendorBtn'),
+            placeBulkOrderBtn: document.getElementById('placeBulkOrderBtn'),
+            
+            // Tables
+            inventoryTableBody: document.getElementById('inventoryTableBody'),
+            canteenTableBody: document.getElementById('canteenTableBody'),
+            vendorTableBody: document.getElementById('vendorTableBody'),
+            auditTableBody: document.getElementById('auditTableBody'),
+            
+            // Form inputs
+            itemName: document.getElementById('itemName'),
+            itemCategory: document.getElementById('itemCategory'),
+            itemType: document.getElementById('itemType'),
+            quantity: document.getElementById('quantity'),
+            expiryDate: document.getElementById('expiryDate'),
+            canteenLocation: document.getElementById('canteenLocation'),
+            supplier: document.getElementById('supplier'),
+            
+            // Search
+            searchInput: document.getElementById('searchInput'),
+            selectAll: document.getElementById('selectAll')
+        };
+
+        // Application Core Functions
+        const app = {
+            init() {
+                this.loadSampleData();
+                this.setupEventListeners();
+                this.renderAllTables();
+                utils.showToast('CampusCanteen Manager initialized successfully!');
+            },
+            
+            loadSampleData() {
+                // Sample inventory items
+                state.inventory = [
+                    new InventoryItem('CTN-001', 'Chicken Sandwich', 'Food', 'nonveg', 15, '2023-11-20', 'Main Canteen', 'green-farms'),
+                    new InventoryItem('CTN-002', 'Veg Pulao', 'Food', 'veg', 28, '2023-11-25', 'Engineering Block', 'grains-more'),
+                    new InventoryItem('CTN-003', 'Egg Roll', 'Food', 'nonveg', 12, '2023-11-18', 'Science Block', 'daily-dairy'),
+                    new InventoryItem('CTN-004', 'Paneer Tikka', 'Food', 'veg', 20, '2023-12-05', 'Main Canteen', 'daily-dairy'),
+                    new InventoryItem('CTN-005', 'Chicken Biryani', 'Food', 'nonveg', 18, '2023-11-22', 'Commerce Block', 'spice-kingdom')
+                ];
+                
+                // Sample canteens
+                state.canteens = [
+                    new Canteen('Main Canteen', 'Central Campus', 24, 8, 5, '2023-11-10'),
+                    new Canteen('Engineering Block', 'Block A', 18, 6, 3, '2023-11-12'),
+                    new Canteen('Science Block', 'Block B', 15, 5, 7, '2023-11-08'),
+                    new Canteen('Commerce Block', 'Block C', 20, 4, 2, '2023-11-14')
+                ];
+                
+                // Sample vendors
+                state.vendors = [
+                    new Vendor('VDR-001', 'Green Farms Organics', 'Fresh Vegetables', '9876543210', 4.8, '2-3 days', 8),
+                    new Vendor('VDR-002', 'Daily Dairy Co.', 'Dairy Products', '9876543211', 4.6, '1-2 days', 5),
+                    new Vendor('VDR-003', 'Grains & More', 'Rice & Pulses', '9876543212', 4.7, '3-4 days', 7),
+                    new Vendor('VDR-004', 'Spice Kingdom', 'Spices & Masalas', '9876543213', 4.5, '2-3 days', 6)
+                ];
+            },
+            
+            setupEventListeners() {
+                // Tab functionality
+                document.querySelectorAll('.tab').forEach(tab => {
+                    tab.addEventListener('click', () => {
+                        const tabId = tab.getAttribute('data-tab');
+                        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                        tab.classList.add('active');
+                        document.getElementById(`${tabId}-tab`).classList.add('active');
+                    });
+                });
+                
+                // Modal functionality
+                elements.addItemBtn.addEventListener('click', () => this.openAddItemModal());
+                elements.addInventoryBtn.addEventListener('click', () => this.openAddItemModal());
+                elements.closeItemModal.addEventListener('click', () => this.closeModal());
+                
+                window.addEventListener('click', (e) => {
+                    if (e.target === elements.addItemModal) {
+                        this.closeModal();
+                    }
+                });
+                
+                // Form submission
+                elements.itemForm.addEventListener('submit', (e) => this.handleItemSubmit(e));
+                
+                // Table actions
+                elements.inventoryTableBody.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('edit-btn')) {
+                        this.editItem(e.target.getAttribute('data-id'));
+                    } else if (e.target.classList.contains('remove-btn')) {
+                        this.removeItem(e.target.getAttribute('data-id'));
+                    }
+                });
+                
+                elements.vendorTableBody.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('order-btn')) {
+                        this.placeOrder(e.target.getAttribute('data-id'));
+                    }
+                });
+                
+                // Bulk actions
+                elements.markNonVegBtn.addEventListener('click', () => this.markNonVegForRemoval());
+                elements.removeNonVegBtn.addEventListener('click', () => this.removeAllNonVeg());
+                elements.restockAllBtn.addEventListener('click', () => this.restockAll());
+                elements.generateOrderBtn.addEventListener('click', () => this.generateOrder());
+                elements.addVendorBtn.addEventListener('click', () => this.addVendor());
+                elements.placeBulkOrderBtn.addEventListener('click', () => this.placeBulkOrder());
+                
+                // Export functionality
+                elements.exportExcelBtn.addEventListener('click', () => this.exportToExcel());
+                elements.exportReportBtn.addEventListener('click', () => this.exportReport());
+                
+                // Search functionality
+                elements.searchInput.addEventListener('input', utils.debounce(() => {
+                    this.filterInventory(elements.searchInput.value);
+                }, 300));
+                
+                // Select all functionality
+                elements.selectAll.addEventListener('change', (e) => {
+                    document.querySelectorAll('.row-checkbox').forEach(checkbox => {
+                        checkbox.checked = e.target.checked;
+                    });
+                });
+            },
+            
+            openAddItemModal(item = null) {
+                elements.modalTitle.textContent = item ? 'Edit Inventory Item' : 'Add New Inventory Item';
+                elements.submitBtnText.textContent = item ? 'Update Item' : 'Add Item to Inventory';
+                
+                if (item) {
+                    elements.editItemId.value = item.id;
+                    elements.itemName.value = item.name;
+                    elements.itemCategory.value = item.category;
+                    elements.itemType.value = item.type;
+                    elements.quantity.value = item.quantity;
+                    elements.expiryDate.value = item.expiryDate;
+                    elements.canteenLocation.value = item.canteen;
+                    elements.supplier.value = item.supplier;
+                    state.editingItem = item;
+                } else {
+                    elements.itemForm.reset();
+                    elements.editItemId.value = '';
+                    state.editingItem = null;
+                }
+                
+                elements.addItemModal.style.display = 'flex';
+            },
+            
+            closeModal() {
+                elements.addItemModal.style.display = 'none';
+                elements.itemForm.reset();
+                state.editingItem = null;
+            },
+            
+            handleItemSubmit(e) {
+                e.preventDefault();
+                
+                const itemData = {
+                    id: elements.editItemId.value || `CTN-${state.nextItemId.toString().padStart(3, '0')}`,
+                    name: elements.itemName.value,
+                    category: elements.itemCategory.value,
+                    type: elements.itemType.value,
+                    quantity: parseInt(elements.quantity.value),
+                    expiryDate: elements.expiryDate.value,
+                    canteen: elements.canteenLocation.value,
+                    supplier: elements.supplier.value
+                };
+                
+                if (state.editingItem) {
+                    // Update existing item
+                    const index = state.inventory.findIndex(item => item.id === state.editingItem.id);
+                    if (index !== -1) {
+                        state.inventory[index] = new InventoryItem(
+                            itemData.id, itemData.name, itemData.category, itemData.type,
+                            itemData.quantity, itemData.expiryDate, itemData.canteen, itemData.supplier
+                        );
+                        utils.showToast('Item updated successfully!');
+                    }
+                } else {
+                    // Add new item
+                    state.inventory.push(new InventoryItem(
+                        itemData.id, itemData.name, itemData.category, itemData.type,
+                        itemData.quantity, itemData.expiryDate, itemData.canteen, itemData.supplier
+                    ));
+                    state.nextItemId++;
+                    utils.showToast('Item added successfully!');
+                }
+                
+                this.renderInventoryTable();
+                this.closeModal();
+            },
+            
+            editItem(itemId) {
+                const item = state.inventory.find(item => item.id === itemId);
+                if (item) {
+                    this.openAddItemModal(item);
+                }
+            },
+            
+            removeItem(itemId) {
+                utils.showConfirmation(
+                    'Are you sure you want to remove this item?',
+                    () => {
+                        state.inventory = state.inventory.filter(item => item.id !== itemId);
+                        this.renderInventoryTable();
+                        utils.showToast('Item removed successfully!', 'warning');
+                    }
+                );
+            },
+            
+            markNonVegForRemoval() {
+                const nonVegItems = state.inventory.filter(item => item.type === 'nonveg');
+                if (nonVegItems.length === 0) {
+                    utils.showToast('No non-vegetarian items found!', 'warning');
+                    return;
+                }
+                
+                document.querySelectorAll('.row-checkbox').forEach(checkbox => {
+                    const itemId = checkbox.getAttribute('data-id');
+                    const item = state.inventory.find(item => item.id === itemId);
+                    if (item && item.type === 'nonveg') {
+                        checkbox.checked = true;
+                    }
+                });
+                
+                utils.showToast(`${nonVegItems.length} non-vegetarian items marked for removal`);
+            },
+            
+            removeAllNonVeg() {
+                const nonVegCount = state.inventory.filter(item => item.type === 'nonveg').length;
+                if (nonVegCount === 0) {
+                    utils.showToast('No non-vegetarian items to remove!', 'warning');
+                    return;
+                }
+                
+                utils.showConfirmation(
+                    `Are you sure you want to remove all ${nonVegCount} non-vegetarian items?`,
+                    () => {
+                        state.inventory = state.inventory.filter(item => item.type !== 'nonveg');
+                        this.renderInventoryTable();
+                        utils.showToast(`All ${nonVegCount} non-vegetarian items removed successfully!`, 'warning');
+                    }
+                );
+            },
+            
+            restockAll() {
+                // Simulate restocking process
+                const submitBtn = elements.restockAllBtn;
+                const originalText = submitBtn.innerHTML;
+                submitBtn.innerHTML = '<span class="spinner"></span> Restocking...';
+                submitBtn.disabled = true;
+                
+                setTimeout(() => {
+                    state.inventory.forEach(item => {
+                        item.quantity += Math.floor(Math.random() * 10) + 5;
+                    });
+                    this.renderInventoryTable();
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.disabled = false;
+                    utils.showToast('All items restocked successfully!');
+                }, 2000);
+            },
+            
+            generateOrder() {
+                const lowStockItems = state.inventory.filter(item => item.quantity < 10);
+                if (lowStockItems.length === 0) {
+                    utils.showToast('No low stock items found!', 'warning');
+                    return;
+                }
+                
+                const orderList = lowStockItems.map(item => 
+                    `${item.name} (Current: ${item.quantity})`
+                ).join('\n');
+                
+                // Show order details in a toast notification
+                utils.showToast(`Generated order for ${lowStockItems.length} low stock items. Check console for details.`, 'info');
+                
+                // Log to console for detailed view
+                console.log(`Generated order for low stock items:\n\n${orderList}`);
+            },
+            
+            addVendor() {
+                const newVendor = new Vendor(
+                    `VDR-${state.nextVendorId.toString().padStart(3, '0')}`,
+                    `New Vendor ${state.nextVendorId}`,
+                    'General Supplies',
+                    '987654321X',
+                    (4 + Math.random()).toFixed(1),
+                    '2-3 days',
+                    Math.floor(Math.random() * 5) + 5
+                );
+                
+                state.vendors.push(newVendor);
+                state.nextVendorId++;
+                this.renderVendorTable();
+                utils.showToast('New vendor added successfully!');
+            },
+            
+            placeOrder(vendorId) {
+                const vendor = state.vendors.find(v => v.id === vendorId);
+                if (vendor) {
+                    utils.showToast(`Order placed with ${vendor.name}!`);
+                }
+            },
+            
+            placeBulkOrder() {
+                if (state.vendors.length === 0) {
+                    utils.showToast('No vendors available!', 'warning');
+                    return;
+                }
+                
+                utils.showToast(`Bulk order placed with ${state.vendors.length} vendors!`);
+            },
+            
+            exportToExcel() {
+                // Simulate Excel export
+                const submitBtn = elements.exportExcelBtn;
+                const originalText = submitBtn.innerHTML;
+                submitBtn.innerHTML = '<span class="spinner"></span> Exporting...';
+                submitBtn.disabled = true;
+                
+                setTimeout(() => {
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.disabled = false;
+                    utils.showToast('Data exported to Excel successfully!');
+                }, 1500);
+            },
+            
+            exportReport() {
+                utils.showToast('Compliance report exported successfully!');
+            },
+            
+            filterInventory(searchTerm) {
+                const filteredItems = state.inventory.filter(item => 
+                    item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    item.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    item.canteen.toLowerCase().includes(searchTerm.toLowerCase())
+                );
+                
+                this.renderInventoryTable(filteredItems);
+            },
+            
+            renderAllTables() {
+                this.renderInventoryTable();
+                this.renderCanteenTable();
+                this.renderVendorTable();
+                this.renderAuditTable();
+            },
+            
+            renderInventoryTable(items = state.inventory) {
+                elements.inventoryTableBody.innerHTML = items.map(item => item.toTableRow()).join('');
+            },
+            
+            renderCanteenTable() {
+                elements.canteenTableBody.innerHTML = state.canteens.map(canteen => canteen.toTableRow()).join('');
+            },
+            
+            renderVendorTable() {
+                elements.vendorTableBody.innerHTML = state.vendors.map(vendor => vendor.toTableRow()).join('');
+            },
+            
+            renderAuditTable() {
+                // Sample audit data
+                const auditData = [
+                    ['2023-11-10', 'Main Canteen', '95%', '88%', '70%', '84%', 'Dr. Sharma', 'Passed'],
+                    ['2023-11-12', 'Engineering Block', '92%', '85%', '65%', '81%', 'Dr. Sharma', 'Passed'],
+                    ['2023-11-08', 'Science Block', '88%', '75%', '50%', '71%', 'Dr. Verma', 'Needs Improvement'],
+                    ['2023-11-14', 'Commerce Block', '90%', '82%', '60%', '77%', 'Dr. Verma', 'Needs Improvement']
+                ];
+                
+                elements.auditTableBody.innerHTML = auditData.map(row => `
+                    <tr>
+                        <td>${row[0]}</td>
+                        <td>${row[1]}</td>
+                        <td>${row[2]}</td>
+                        <td>${row[3]}</td>
+                        <td>${row[4]}</td>
+                        <td>${row[5]}</td>
+                        <td>${row[6]}</td>
+                        <td><span class="status-badge ${row[7] === 'Passed' ? 'status-good' : 'status-warning'}">${row[7]}</span></td>
+                    </tr>
+                `).join('');
+            }
+        };
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', () => {
+            app.init();
+            
+            // Simulate real-time updates
+            setInterval(() => {
+                // Update dashboard values randomly
+                const expiringCount = document.querySelector('.dashboard-card.warning .value');
+                const currentCount = parseInt(expiringCount.textContent);
+                const change = Math.floor(Math.random() * 3) - 1;
+                expiringCount.textContent = Math.max(0, currentCount + change);
+                
+                const complianceScore = document.querySelector('.dashboard-card.success .value');
+                const currentScore = parseInt(complianceScore.textContent);
+                const scoreChange = Math.floor(Math.random() * 3) - 1;
+                complianceScore.textContent = Math.max(0, Math.min(100, currentScore + scoreChange)) + '%';
+            }, 10000);
+        });
+
+        // Temperature monitoring simulation
+        function simulateTemperatureMonitoring() {
+            const temperatureCards = document.querySelectorAll('.temperature-card');
+            
+            temperatureCards.forEach(card => {
+                const tempValue = card.querySelector('.temperature-value');
+                const tempIcon = card.querySelector('.temperature-icon');
+                const tempProgress = card.querySelector('.temperature-progress-bar');
+                const tempAlert = card.querySelector('.temp-alert');
+                
+                // Get current temperature
+                let currentTemp = parseInt(tempValue.textContent);
+                
+                // Simulate small temperature fluctuations
+                const change = (Math.random() * 4 - 2).toFixed(1);
+                currentTemp = parseFloat(currentTemp) + parseFloat(change);
+                
+                // Update display
+                tempValue.textContent = currentTemp.toFixed(0) + '°C';
+                
+                // Update status based on temperature
+                if (currentTemp >= 175 && currentTemp <= 190) {
+                    // Optimal temperature
+                    tempIcon.className = 'temperature-icon good';
+                    tempIcon.innerHTML = '<i class="fas fa-thermometer-half"></i>';
+                    tempProgress.className = 'temperature-progress-bar good';
+                    tempAlert.className = 'temp-alert';
+                    tempAlert.innerHTML = '<i class="fas fa-check-circle"></i> Temperature within optimal range';
+                } else if (currentTemp < 175) {
+                    // Too low
+                    tempIcon.className = 'temperature-icon warning';
+                    tempIcon.innerHTML = '<i class="fas fa-thermometer-half"></i>';
+                    tempProgress.className = 'temperature-progress-bar warning';
+                    tempAlert.className = 'temp-alert';
+                    tempAlert.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Temperature slightly low - Food may absorb more oil';
+                } else {
+                    // Too high
+                    tempIcon.className = 'temperature-icon danger';
+                    tempIcon.innerHTML = '<i class="fas fa-thermometer-half"></i>';
+                    tempProgress.className = 'temperature-progress-bar danger';
+                    tempAlert.className = 'temp-alert danger';
+                    tempAlert.innerHTML = '<i class="fas fa-exclamation-circle"></i> Temperature too high - Risk of burning and harmful compounds';
+                }
+                
+                // Update progress bar width based on temperature (150-220°C range)
+                const progressWidth = ((currentTemp - 150) / 70) * 100;
+                tempProgress.style.width = Math.max(0, Math.min(100, progressWidth)) + '%';
+            });
+        }
+
+        // Start temperature monitoring simulation
+        setInterval(simulateTemperatureMonitoring, 5000);
+    </script>
+</body>
+</html>
